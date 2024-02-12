@@ -6,12 +6,35 @@
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src='../js/main.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-    <h1 class="text-3xl font-bold underline">
-        Hello world!
-    </h1>
+    <header class="flex mt-8 justify-between">
+        <section class="grid grid-rows-2 ml-52 gap-y-1">
+            <span class="text-4xl font-semibold text-amber-700">Sophie Bluel</span>
+            <span class="text-amber-800 text-xs uppercase">architecte d’intérieur</span>
+        </section>
+        <section class="grid grid-cols-4 mr-52 gap-x-12">
+            <a href="#">projets</a>
+            <a href="#">contact</a>
+            <a href="#">login</a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        </section>
+    </header>
+    <section class="grid grid-cols-2 gap-x-16 mt-20">
+        <img src="../images/sophie-bluel.png" class="w-8/12 justify-self-end">
+        <article class="w-1/2 h-2/5 grid grid-rows-2">
+            <span class="text-3xl font-semibold text-teal-700 text-center pt-16">Mon projet</span>
+            <span class="text-sm whitespace-pre-line -pt-32">
+                Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.
+
+                Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux, et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.
+                
+                En cas de besoin, une équipe pluridisciplinaire peut être constituée : architecte DPLG, décorateur(trice).</span>
+        </article>
+    </section>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src='../js/main.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
 </body>
 </html>
