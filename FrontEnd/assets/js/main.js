@@ -16,7 +16,7 @@ function data(){
             image.src = element.imageUrl;
             image.classList.add('h-96', 'object-contain');
             let p = div.appendChild(document.createElement("p"));
-            p.classList.add('text-sm');
+            p.classList.add('text-sm', 'py-2');
             p.textContent = element.title;
         });
     })
@@ -62,7 +62,7 @@ function dataFilter(number){
                 image.src = element.imageUrl;
                 image.classList.add('h-96', 'object-contain');
                 let p = div.appendChild(document.createElement("p"));
-                p.classList.add('text-sm');
+                p.classList.add('text-sm', 'py-2');
                 p.textContent = element.title;
             }
         })
