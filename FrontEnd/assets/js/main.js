@@ -7,21 +7,64 @@ let arrayTest = testWork();
 
 let listProjects = document.getElementById("listProjects");
 
-arrayTest.then(function(result) {
-    result.forEach(element => {
-        // console.log(element.title);
-        let div = listProjects.appendChild(document.createElement("div"));
-        // div.classList.add('w-1/2')
-        let image = div.appendChild(document.createElement('img'));
-        image.src = element.imageUrl
-        image.classList.add('max-h-96', 'object-contain')
-        let p = div.appendChild(document.createElement("p"));
-        p.classList.add('text-center')
-        p.textContent = element.title;
-    });
-})
- 
- // arrayTest.forEach(function(item) {
-//     console.log(item.title);
-// });
+function data(){
+    listProjects.textContent = '';
+    arrayTest.then(function(result) {
+        result.forEach(element => {
+            let div = listProjects.appendChild(document.createElement("div"));
+            let image = div.appendChild(document.createElement('img'));
+            image.src = element.imageUrl;
+            image.classList.add('h-96', 'object-contain');
+            let p = div.appendChild(document.createElement("p"));
+            p.classList.add('text-sm');
+            p.textContent = element.title;
+        });
+    })
+}
+data();
+let all = document.getElementById("all");
+let obj = document.getElementById("obj");
+let appart = document.getElementById("appart");
+let hotel = document.getElementById("hotel");
 
+function changeButtons(but1){
+    all.classList.contains('text-white') ? (all.classList.remove('bg-teal-700', 'text-white'), all.classList.add('text-teal-700')) : "";  
+    obj.classList.contains('text-white') ? (obj.classList.remove('bg-teal-700', 'text-white'), obj.classList.add('text-teal-700')) : "";  
+    appart.classList.contains('text-white') ? (appart.classList.remove('bg-teal-700', 'text-white'), appart.classList.add('text-teal-700')) : "";  
+    hotel.classList.contains('text-white') ? (hotel.classList.remove('bg-teal-700', 'text-white'), hotel.classList.add('text-teal-700')) : "";  
+    but1.classList.add('bg-teal-700', 'text-white');
+}
+
+all.addEventListener('click',function(event){
+    changeButtons(all);
+    data()
+});
+obj.addEventListener('click',function(event){
+    changeButtons(obj);
+    dataFilter(1)
+});
+appart.addEventListener('click',function(event){
+    changeButtons(appart);
+    dataFilter(2)
+});
+hotel.addEventListener('click',function(event){
+    changeButtons(hotel);
+    dataFilter(3)
+});
+
+function dataFilter(number){
+    listProjects.textContent = '';
+    arrayTest.then(function(result){
+        result.forEach(element =>{
+            if(element.categoryId ==number){
+                let div = listProjects.appendChild(document.createElement("div"));
+                let image = div.appendChild(document.createElement('img'));
+                image.src = element.imageUrl;
+                image.classList.add('h-96', 'object-contain');
+                let p = div.appendChild(document.createElement("p"));
+                p.classList.add('text-sm');
+                p.textContent = element.title;
+            }
+        })
+    })
+}
