@@ -1,15 +1,21 @@
-async function testWork(){
+async function testWork(){ //fonction de récup de l'api
     const response = await fetch("http://localhost:5678/api/works");
-    const projects = await response.json();
-    return projects;
+    return await response.json();
 }
-let arrayTest = testWork();
-
+let fetchdJson = testWork();
 let listProjects = document.getElementById("listProjects");
 
-function data(){
+function changeButtons(but1){ // fonction de changement de couleur des boutons
+    all.classList.contains('text-white') ? (all.classList.remove('bg-teal-700', 'text-white'), all.classList.add('text-teal-700')) : "";  
+    obj.classList.contains('text-white') ? (obj.classList.remove('bg-teal-700', 'text-white'), obj.classList.add('text-teal-700')) : "";  
+    appart.classList.contains('text-white') ? (appart.classList.remove('bg-teal-700', 'text-white'), appart.classList.add('text-teal-700')) : "";  
+    hotel.classList.contains('text-white') ? (hotel.classList.remove('bg-teal-700', 'text-white'), hotel.classList.add('text-teal-700')) : "";  
+    but1.classList.add('bg-teal-700', 'text-white');
+}
+
+function displayData(){ // Affichage des datas raw de l'api
     listProjects.textContent = '';
-    arrayTest.then(function(result) {
+    fetchdJson.then(function(result) {
         result.forEach(element => {
             let div = listProjects.appendChild(document.createElement("div"));
             let image = div.appendChild(document.createElement('img'));
@@ -21,40 +27,10 @@ function data(){
         });
     })
 }
-data();
-let all = document.getElementById("all");
-let obj = document.getElementById("obj");
-let appart = document.getElementById("appart");
-let hotel = document.getElementById("hotel");
 
-function changeButtons(but1){
-    all.classList.contains('text-white') ? (all.classList.remove('bg-teal-700', 'text-white'), all.classList.add('text-teal-700')) : "";  
-    obj.classList.contains('text-white') ? (obj.classList.remove('bg-teal-700', 'text-white'), obj.classList.add('text-teal-700')) : "";  
-    appart.classList.contains('text-white') ? (appart.classList.remove('bg-teal-700', 'text-white'), appart.classList.add('text-teal-700')) : "";  
-    hotel.classList.contains('text-white') ? (hotel.classList.remove('bg-teal-700', 'text-white'), hotel.classList.add('text-teal-700')) : "";  
-    but1.classList.add('bg-teal-700', 'text-white');
-}
-
-all.addEventListener('click',function(event){
-    changeButtons(all);
-    data()
-});
-obj.addEventListener('click',function(event){
-    changeButtons(obj);
-    dataFilter(1)
-});
-appart.addEventListener('click',function(event){
-    changeButtons(appart);
-    dataFilter(2)
-});
-hotel.addEventListener('click',function(event){
-    changeButtons(hotel);
-    dataFilter(3)
-});
-
-function dataFilter(number){
+function filterJson(number){ // affichage des datas filtrés par une option
     listProjects.textContent = '';
-    arrayTest.then(function(result){
+    fetchdJson.then(function(result){
         result.forEach(element =>{
             if(element.categoryId ==number){
                 let div = listProjects.appendChild(document.createElement("div"));
@@ -68,3 +44,22 @@ function dataFilter(number){
         })
     })
 }
+// Intéractions des boutons lors du clic
+all.addEventListener('click',function(event){
+    changeButtons(all);
+    data()
+});
+obj.addEventListener('click',function(event){
+    changeButtons(obj);
+    filterJson(1)
+});
+appart.addEventListener('click',function(event){
+    changeButtons(appart);
+    filterJson(2)
+});
+hotel.addEventListener('click',function(event){
+    changeButtons(hotel);
+    filterJson(3)
+});
+
+displayData();
