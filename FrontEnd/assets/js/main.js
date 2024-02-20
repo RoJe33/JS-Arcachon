@@ -59,7 +59,7 @@ appart.addEventListener('click',function(event){
 });
 hotel.addEventListener('click',function(event){
     changeButtons(hotel);
-    filterJson(3)
+    filterJson(3);
 });
 
 displayData();
