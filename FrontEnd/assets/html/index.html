@@ -16,7 +16,7 @@
         <section class="grid grid-cols-4 mr-52 gap-x-12">
             <a href="#">projets</a>
             <a href="#">contact</a>
-            <a href="login.html">login</a>
+            <a href="login.html" id="login">login</a>
             <a href="#"><i class="fa-brands fa-instagram"></i></a>
         </section>
     </header>
@@ -33,8 +33,10 @@
         </article>
     </section>
     <section class="flex flex-col items-center gap-y-8 -mt-24">
-        <article class="text-3xl font-semibold text-teal-700 text-center">Mes projets</article>
-        <article class="flex justify-center gap-x-2 mt-8">
+        <article class="text-3xl font-semibold text-teal-700 text-center flex" id="myProjects">Mes projets
+            <button class="text-gray-500 ml-4 text-base mt-2 hidden" id="panelModify"><i class="fa-regular fa-pen-to-square"></i> modifier</button>
+        </article>
+        <article class="flex justify-center gap-x-2 mt-8" id="myButtons">
             <button id="all" class="border-2 text-white bg-teal-700 border-teal-700 rounded-full px-4" >Tous</button>
             <button id="obj" class="border-2 text-teal-700 border-teal-700 rounded-full px-4">Objets</button>
             <button id="appart" class="border-2 text-teal-700 border-teal-700 rounded-full px-4">Appartements</button>
@@ -43,6 +45,48 @@
         <article id="listProjects" class="grid grid-cols-3 gap-x-4 gap-y-2">
         </article>
     </section>
+    <div id="panel-data-api"
+        class="fixed left-0 top-0 bg-black bg-opacity-50 w-screen h-screen flex justify-center items-center opacity-0 hidden transition-opacity duration-500">
+        <div id="child-panel-api" class="bg-white rounded shadow-md p-8 w-[40%] h-[85%]">
+            <div class="flex justify-end cursor-pointer" id="X">
+                <i class="fa-solid fa-x"></i>
+            </div>
+            <div class="flex justify-center mt-8 text-2xl"><h1>Galerie photo</h1></div>
+            <div id="panelProjects" class="grid grid-cols-5 gap-x-2 gap-y-2 mx-20 pb-4 mt-8 border-b-2 border-gray-300">
+            </div>
+            <div class="flex justify-center items-center pt-4">
+                <button id="addProject" class="border-2 text-white bg-teal-700 border-teal-700 rounded-full px-12 py-2">Ajouter une photo</button>
+            </div>
+        </div>
+    </div>
+    <div id="addProjectPanel" 
+        class="fixed left-0 top-0 bg-black bg-opacity-50 w-screen h-screen flex justify-center items-center opacity-0 hidden transition-opacity duration-500">
+        <div id="child-add-panel" class="bg-white rounded shadow-md p-8 w-[40%] h-[85%]">
+            <div class="flex justify-between">
+                <div class="flex justify-end cursor-pointer" id="returnPanel">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </div>
+                <div class="flex justify-end cursor-pointer" id="closeAdd">
+                    <i class="fa-solid fa-x"></i>
+                </div>
+            </div>
+            <div class="flex justify-center mt-8 text-2xl"><h1>Ajout photo</h1></div>
+            <div class="bg-blue-100 grid grid-cols-1 justify-center gap-y-2 my-8 py-4 mx-16">
+                <div class="justify-center flex">
+                    <i class="fa-regular fa-image h-20 w-20 text-gray-500"></i>
+                </div>
+                <div class="flex justify-center">
+                    <button class="border rounded-full py-2 px-10 text-teal-700 bg-gray-300 font-semibold">+ Ajouter photo</button>
+                </div>
+                <div class="flex justify-center text-slate-700 text-sm">
+                    jpg, png : 4mo max
+                </div>
+            </div>
+            <div>
+                
+            </div>
+        </div>
+    </div>
     <footer class="flex justify-end mt-8 mr-20 mb-4">
         <div>Mentions légales</div>
     </footer>
