@@ -1,58 +1,3 @@
-// const postApi = async (body)=>{
-//     try {
-//         let response = await fetch("http://localhost:5678/api/users/login", {
-//             method: "POST",
-//             headers: {"Content-Type": "application/json"},
-//             body: JSON.stringify(body),
-//         });
-//         return {data: await response.json(), status: response.status}
-//     } catch (error) {
-//         console.error("Une erreur est survenue",error);
-//         return null;
-//     }
-// }
-
-// const formSub = async(event)=>{
-//     event.preventDefault();
-//     const email = document.getElementById("mail").value;
-//     const password = document.getElementById("password").value;
-//     const response = await postApi({
-//         email,
-//         password,
-//     })
-// }
-
-// const submit = document.getElementById("submit");
-
-// if (submit) {
-//     submit.addEventListener("submit", formSub);
-//   }
-
-//   async function postApi(username, password) {
-//     const headers = new Headers();
-//     headers.append('Content-Type', 'application/json');
-   
-//     const options = {
-//       method: 'POST',
-//       body: JSON.stringify({
-//         email,
-//         password
-//       }),
-//       headers
-//     };
-   
-//     const response = await fetch('http://localhost:5678/api/users/login', options);
-//     return response.json();
-//   }
-
-//   const submit = document.getElementById("submit");
-//   const email = document.getElementById("mail").value;
-//       const password = document.getElementById("password").value;
-// if (submit) {
-//     submit.addEventListener("submit", postApi(email, password));
-//   }
-
-
 // LOGIN
 
 // Poste des données à l'API
@@ -84,11 +29,14 @@ const postToAPI = async (url, body) => {
       localStorage.setItem("user", JSON.stringify(response.data.userId));
       localStorage.setItem("token", response.data.token);
       location.href = "index.html";
+    } else {
+      document.getElementById("error-message").textContent =
+        "Identifiant ou mot de passe incorrect";
     } 
   };
 
-  const submit = document.getElementById("submit");
+  const form = document.getElementById("formLogin");
 
-if (submit) {
-    submit.addEventListener("submit", handleFormSubmission);
+if (form) {
+    form.addEventListener("submit", handleFormSubmission);
   }
