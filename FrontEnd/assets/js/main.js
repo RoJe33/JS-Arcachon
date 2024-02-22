@@ -47,7 +47,7 @@ function filterJson(number){ // affichage des datas filtrés par une option
 // Intéractions des boutons lors du clic
 all.addEventListener('click',function(event){
     changeButtons(all);
-    data()
+    displayData()
 });
 obj.addEventListener('click',function(event){
     changeButtons(obj);
