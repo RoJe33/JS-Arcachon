@@ -2,7 +2,13 @@ async function testWork(){ //fonction de récup de l'api
     const response = await fetch("http://localhost:5678/api/works");
     return await response.json();
 }
+
+async function categories(){ //fonction de récup de l'api
+    const response = await fetch("http://localhost:5678/api/categories");
+    return await response.json();
+}
 let fetchdJson = testWork();
+let fetchdCategories = categories();
 let listProjects = document.getElementById("listProjects");
 let login = document.getElementById("login");
 let myButtons = document.getElementById("myButtons");
@@ -17,7 +23,10 @@ let addProjectPanel = document.getElementById("addProjectPanel");
 let childAddPanel = document.getElementById("child-add-panel");
 let closeAdd = document.getElementById("closeAdd");
 let returnPanel = document.getElementById("returnPanel");
-
+let uploadPhoto = document.getElementById("uploadPhoto");
+let buttonFile = document.getElementById("buttonFile");
+let category = document.getElementById("category");
+let previewImage = document.getElementById("previewImage");
 
 
 function changeButtons(but1){ // fonction de changement de couleur des boutons
@@ -181,3 +190,34 @@ returnPanel.addEventListener('click', function(event){
         addProjectPanel.classList.add("hidden");
     }, 500)
 })
+
+buttonFile.addEventListener('click', function(event){
+    uploadPhoto.click();
+})
+
+function displayCat(){ // Affichage des datas raw de l'api
+    fetchdCategories.then(function(result) {
+        result.forEach(element => {
+            let option = category.appendChild(document.createElement("option"));
+            option.value = element.id;
+            option.textContent = element.name;
+            option.classList.add("pl-2")
+        });
+    })
+}
+
+displayCat();
+
+function uploadImage(){
+    let file = uploadPhoto.files[0];
+    console.log(file);
+    if(file){
+        let reader = new FileReader();
+
+        reader.onload = function (e) {
+            let imageDataUrl = e.target.result;
+            previewImage.innerHTML = '<img src="${imageDataUrl}" alt="Uploaded Image" style="max-width: 300px;">`'
+        }
+    }
+}
+console.log(uploadPhoto.files)
