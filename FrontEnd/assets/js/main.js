@@ -27,6 +27,8 @@ let uploadPhoto = document.getElementById("uploadPhoto");
 let buttonFile = document.getElementById("buttonFile");
 let category = document.getElementById("category");
 let previewImage = document.getElementById("previewImage");
+let addForm = document.getElementById("addForm");
+let innerPreview = previewImage.innerHTML;
 
 
 function changeButtons(but1){ // fonction de changement de couleur des boutons
@@ -157,6 +159,9 @@ function showAddPanel(){
     }, 500)
 }
 function hideAddPanel(){
+    addForm.reset();
+    previewImage.innerHTML = innerPreview;
+    //marche pas lorsque que je reclick sur le bouton
     addProjectPanel.classList.remove("opacity-100");
     addProjectPanel.classList.add("opacity-0");
     setTimeout(()=> {
@@ -210,14 +215,17 @@ displayCat();
 
 function uploadImage(){
     let file = uploadPhoto.files[0];
-    console.log(file);
     if(file){
         let reader = new FileReader();
-
         reader.onload = function (e) {
+            console.log(file)
             let imageDataUrl = e.target.result;
-            previewImage.innerHTML = '<img src="${imageDataUrl}" alt="Uploaded Image" style="max-width: 300px;">`'
+            previewImage.innerHTML = `<div class="justify-center flex"><img src="${imageDataUrl}" alt="Uploaded Image" class="max-h-40 max-w-80 items-center"></div>`
         }
+        reader.readAsDataURL(file);
     }
 }
-console.log(uploadPhoto.files)
+
+uploadPhoto.addEventListener('change', function(event){
+    uploadImage();
+})
