@@ -39,17 +39,21 @@ function changeButtons(but1){ // fonction de changement de couleur des boutons
     but1.classList.add('bg-teal-700', 'text-white');
 }
 
+function displayOneProject(url, title){
+    let div = listProjects.appendChild(document.createElement("div"));
+    let image = div.appendChild(document.createElement('img'));
+    image.src = url;
+    image.classList.add('h-96', 'object-contain');
+    let p = div.appendChild(document.createElement("p"));
+    p.classList.add('text-sm', 'py-2');
+    p.textContent = title;
+}
+
 function displayData(){ // Affichage des datas raw de l'api
     listProjects.textContent = '';
     fetchdJson.then(function(result) {
         result.forEach(element => {
-            let div = listProjects.appendChild(document.createElement("div"));
-            let image = div.appendChild(document.createElement('img'));
-            image.src = element.imageUrl;
-            image.classList.add('h-96', 'object-contain');
-            let p = div.appendChild(document.createElement("p"));
-            p.classList.add('text-sm', 'py-2');
-            p.textContent = element.title;
+            displayOneProject(element.imageUrl,element.title)
         });
     })
 }
@@ -111,21 +115,26 @@ function hidePanelApi(){
         panelApi.classList.add("hidden");
     }, 500)
 }
+
+function displayOneProjectPanel(url){
+    let div = panelProjects.appendChild(document.createElement("div"));
+    div.classList.add('relative')
+    let thrash = div.appendChild(document.createElement('div'));
+    thrash.classList.add('fixed','ml-8','mt-1', 'z-10', 'bg-black','h-5', 'w-5', 'flex', 'justify-center', 'items-center', 'cursor-pointer');
+    thrash.innerHTML = "<i class=\"fa-solid fa-trash text-white\"></i>";
+    let image = div.appendChild(document.createElement('img'));
+    image.src = url;
+    image.classList.add('object-contain', 'max-h-20');
+    let p = div.appendChild(document.createElement("p"));
+    p.classList.add('text-sm', 'py-2');
+    p.textContent = "éditer";
+}
+
 function displayDataPanel(){ 
     panelProjects.textContent = '';
     fetchdJson.then(function(result) {
         result.forEach(element => {
-            let div = panelProjects.appendChild(document.createElement("div"));
-            div.classList.add('relative')
-            let thrash = div.appendChild(document.createElement('div'));
-            thrash.classList.add('fixed','ml-8','mt-1', 'z-10', 'bg-black','h-5', 'w-5', 'flex', 'justify-center', 'items-center', 'cursor-pointer');
-            thrash.innerHTML = "<i class=\"fa-solid fa-trash text-white\"></i>";
-            let image = div.appendChild(document.createElement('img'));
-            image.src = element.imageUrl;
-            image.classList.add('object-contain', 'max-h-20');
-            let p = div.appendChild(document.createElement("p"));
-            p.classList.add('text-sm', 'py-2');
-            p.textContent = "éditer";
+            displayOneProjectPanel(element.imageUrl);
         });
     })
 }
@@ -215,6 +224,7 @@ displayCat();
 
 function uploadImage(){
     let file = uploadPhoto.files[0];
+    console.log(uploadPhoto.getAttribute('name'))
     if(file){
         let reader = new FileReader();
         reader.onload = function (e) {
@@ -236,7 +246,6 @@ addForm.onsubmit = async (e) => {
     let fileInput = uploadPhoto.files[0];
     let formTest = new FormData(addForm);
     formTest.append("image", fileInput, "test.png")
-    console.log(formTest)
 
     let response = await fetch("http://localhost:5678/api/works", {
         method: 'POST',
@@ -245,9 +254,11 @@ addForm.onsubmit = async (e) => {
         },
         body: formTest
     })
-    console.log(response)
 
     let result = await response.json();
-
-    console.log(result.message);
+    if(response.ok){
+        displayOneProject(result.imageUrl,result.title);
+        displayOneProjectPanel(result.imageUrl);
+        hideAddPanel()
+    }
 }
