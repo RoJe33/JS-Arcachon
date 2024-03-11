@@ -234,15 +234,18 @@ addForm.onsubmit = async (e) => {
     e.preventDefault();
 
     let fileInput = uploadPhoto.files[0];
-    console.log(fileInput);
     let formTest = new FormData(addForm);
-    formTest.append("uploadPhoto", fileInput, "test.png")
-
+    formTest.append("image", fileInput, "test.png")
+    console.log(formTest)
 
     let response = await fetch("http://localhost:5678/api/works", {
         method: 'POST',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
         body: formTest
     })
+    console.log(response)
 
     let result = await response.json();
 
