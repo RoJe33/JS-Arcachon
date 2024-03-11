@@ -229,3 +229,22 @@ function uploadImage(){
 uploadPhoto.addEventListener('change', function(event){
     uploadImage();
 })
+
+addForm.onsubmit = async (e) => {
+    e.preventDefault();
+
+    let fileInput = uploadPhoto.files[0];
+    console.log(fileInput);
+    let formTest = new FormData(addForm);
+    formTest.append("uploadPhoto", fileInput, "test.png")
+
+
+    let response = await fetch("http://localhost:5678/api/works", {
+        method: 'POST',
+        body: formTest
+    })
+
+    let result = await response.json();
+
+    console.log(result.message);
+}
