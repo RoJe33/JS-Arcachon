@@ -1,3 +1,5 @@
+// Appel asynchrone des projets ainsi que des catégories
+
 async function testWork(){ //fonction de récup de l'api
     const response = await fetch("http://localhost:5678/api/works");
     return await response.json();
@@ -7,6 +9,9 @@ async function categories(){ //fonction de récup de l'api
     const response = await fetch("http://localhost:5678/api/categories");
     return await response.json();
 }
+
+//Liste des variables
+
 let fetchdJson = testWork();
 let fetchdCategories = categories();
 let listProjects = document.getElementById("listProjects");
@@ -30,6 +35,8 @@ let previewImage = document.getElementById("previewImage");
 let addForm = document.getElementById("addForm");
 let innerPreview = previewImage.innerHTML;
 let deletePanel = document.getElementById("panel-delete-api");
+
+// Liste des fonctions
 
 function changeButtons(but1){ // fonction de changement de couleur des boutons
     all.classList.contains('text-white') ? (all.classList.remove('bg-teal-700', 'text-white'), all.classList.add('text-teal-700')) : "";  
@@ -75,32 +82,6 @@ function filterJson(number){ // affichage des datas filtrés par une option
         })
     })
 }
-// Intéractions des boutons lors du clic
-all.addEventListener('click',function(event){
-    changeButtons(all);
-    displayData()
-});
-obj.addEventListener('click',function(event){
-    changeButtons(obj);
-    filterJson(1)
-});
-appart.addEventListener('click',function(event){
-    changeButtons(appart);
-    filterJson(2)
-});
-hotel.addEventListener('click',function(event){
-    changeButtons(hotel);
-    filterJson(3);
-});
-
-displayData();
-
-localStorage.getItem("token") ? login.textContent = "logout" : '';
-
-if(localStorage.getItem("token")){
-    myButtons.classList.add("hidden")
-    panelModify.classList.remove("hidden")
-}
 
 function showPanelApi(){
     panelApi.classList.remove("hidden");
@@ -109,6 +90,7 @@ function showPanelApi(){
         panelApi.classList.remove("opacity-0");
     })
 }
+
 function hidePanelApi(){
     panelApi.classList.remove("opacity-100");
     panelApi.classList.add("opacity-0");
@@ -143,24 +125,6 @@ function displayDataPanel(){
     })
 }
 
-panelModify.addEventListener('click', function(event){
-    showPanelApi();
-    displayDataPanel();
-})
-
-childPanelApi.addEventListener('click', function(event){
-    event.stopPropagation   ;
-})
-
-panelApi.addEventListener('click',function(event){
-    if(event.target === panelApi){
-        hidePanelApi();
-    }
-})
-X.addEventListener('click',function(event){
-        hidePanelApi();
-})
-
 function showAddPanel(){
     addProjectPanel.classList.remove("hidden");
     addProjectPanel.classList.add("opacity-100");
@@ -171,6 +135,7 @@ function showAddPanel(){
         panelApi.classList.add("hidden");
     }, 500)
 }
+
 function hideAddPanel(){
     addForm.reset();
     previewImage.innerHTML = innerPreview;
@@ -182,12 +147,80 @@ function hideAddPanel(){
     }, 500)
 }
 
+function displayCat(){ // Affichage des datas raw de l'api
+    fetchdCategories.then(function(result) {
+        result.forEach(element => {
+            let option = category.appendChild(document.createElement("option"));
+            option.value = element.id;
+            option.textContent = element.name;
+            option.classList.add("pl-2")
+        });
+    })
+}
+
+function uploadImage(){
+    let file = uploadPhoto.files[0];
+    console.log(uploadPhoto.getAttribute('name'))
+    if(file){
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            console.log(file)
+            let imageDataUrl = e.target.result;
+            previewImage.innerHTML = `<div class="justify-center flex"><img src="${imageDataUrl}" alt="Uploaded Image" class="max-h-40 max-w-80 items-center"></div>`
+        }
+        reader.readAsDataURL(file);
+    }
+}
+
+// Liste des Event et submit
+
+all.addEventListener('click',function(event){
+    changeButtons(all);
+    displayData()
+});
+
+obj.addEventListener('click',function(event){
+    changeButtons(obj);
+    filterJson(1)
+});
+
+appart.addEventListener('click',function(event){
+    changeButtons(appart);
+    filterJson(2)
+});
+
+hotel.addEventListener('click',function(event){
+    changeButtons(hotel);
+    filterJson(3);
+});
+
+panelModify.addEventListener('click', function(event){
+    showPanelApi();
+    displayDataPanel();
+})
+
+childPanelApi.addEventListener('click', function(event){
+    event.stopPropagation;
+})
+
+panelApi.addEventListener('click',function(event){
+    if(event.target === panelApi){
+        hidePanelApi();
+    }
+})
+
+X.addEventListener('click',function(event){
+    hidePanelApi();
+})
+
 addProject.addEventListener('click', function(event){
     showAddPanel();
 })
+
 closeAdd.addEventListener('click', function(event){
     hideAddPanel();
 })
+
 childAddPanel.addEventListener('click', function(event){
     event.stopPropagation   ;
 })
@@ -213,44 +246,17 @@ buttonFile.addEventListener('click', function(event){
     uploadPhoto.click();
 })
 
-function displayCat(){ // Affichage des datas raw de l'api
-    fetchdCategories.then(function(result) {
-        result.forEach(element => {
-            let option = category.appendChild(document.createElement("option"));
-            option.value = element.id;
-            option.textContent = element.name;
-            option.classList.add("pl-2")
-        });
-    })
-}
-
-displayCat();
-
-function uploadImage(){
-    let file = uploadPhoto.files[0];
-    console.log(uploadPhoto.getAttribute('name'))
-    if(file){
-        let reader = new FileReader();
-        reader.onload = function (e) {
-            console.log(file)
-            let imageDataUrl = e.target.result;
-            previewImage.innerHTML = `<div class="justify-center flex"><img src="${imageDataUrl}" alt="Uploaded Image" class="max-h-40 max-w-80 items-center"></div>`
-        }
-        reader.readAsDataURL(file);
-    }
-}
-
 uploadPhoto.addEventListener('change', function(event){
     uploadImage();
 })
 
 addForm.onsubmit = async (e) => {
     e.preventDefault();
-
+    
     let fileInput = uploadPhoto.files[0];
     let formTest = new FormData(addForm);
     formTest.append("image", fileInput, "test.png")
-
+    
     let response = await fetch("http://localhost:5678/api/works", {
         method: 'POST',
         headers: {
@@ -267,4 +273,17 @@ addForm.onsubmit = async (e) => {
         })
         hideAddPanel()
     }
+}
+
+// Appels des fonctions dès le load de la page
+
+displayData();
+displayCat();
+
+//Vérif token
+localStorage.getItem("token") ? login.textContent = "logout" : '';
+
+if(localStorage.getItem("token")){
+    myButtons.classList.add("hidden")
+    panelModify.classList.remove("hidden")
 }
