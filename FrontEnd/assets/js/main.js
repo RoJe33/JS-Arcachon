@@ -29,7 +29,7 @@ let category = document.getElementById("category");
 let previewImage = document.getElementById("previewImage");
 let addForm = document.getElementById("addForm");
 let innerPreview = previewImage.innerHTML;
-
+let deletePanel = document.getElementById("panel-delete-api");
 
 function changeButtons(but1){ // fonction de changement de couleur des boutons
     all.classList.contains('text-white') ? (all.classList.remove('bg-teal-700', 'text-white'), all.classList.add('text-teal-700')) : "";  
@@ -39,8 +39,9 @@ function changeButtons(but1){ // fonction de changement de couleur des boutons
     but1.classList.add('bg-teal-700', 'text-white');
 }
 
-function displayOneProject(url, title){
+function displayOneProject(id, url, title){
     let div = listProjects.appendChild(document.createElement("div"));
+    div.setAttribute('data-id', id)
     let image = div.appendChild(document.createElement('img'));
     image.src = url;
     image.classList.add('h-96', 'object-contain');
@@ -53,7 +54,7 @@ function displayData(){ // Affichage des datas raw de l'api
     listProjects.textContent = '';
     fetchdJson.then(function(result) {
         result.forEach(element => {
-            displayOneProject(element.imageUrl,element.title)
+            displayOneProject(element.id, element.imageUrl,element.title)
         });
     })
 }
@@ -116,10 +117,13 @@ function hidePanelApi(){
     }, 500)
 }
 
-function displayOneProjectPanel(url){
+function displayOneProjectPanel(id, url){
     let div = panelProjects.appendChild(document.createElement("div"));
+    div.setAttribute('data-id', id)
     div.classList.add('relative')
-    let thrash = div.appendChild(document.createElement('div'));
+    let thrash = div.appendChild(document.createElement('button'));
+    thrash.setAttribute = ('id', 'deleteButton'); //
+    thrash.setAttribute = ('data-id', id);
     thrash.classList.add('fixed','ml-8','mt-1', 'z-10', 'bg-black','h-5', 'w-5', 'flex', 'justify-center', 'items-center', 'cursor-pointer');
     thrash.innerHTML = "<i class=\"fa-solid fa-trash text-white\"></i>";
     let image = div.appendChild(document.createElement('img'));
@@ -134,7 +138,7 @@ function displayDataPanel(){
     panelProjects.textContent = '';
     fetchdJson.then(function(result) {
         result.forEach(element => {
-            displayOneProjectPanel(element.imageUrl);
+            displayOneProjectPanel(element.id, element.imageUrl);
         });
     })
 }
@@ -254,11 +258,13 @@ addForm.onsubmit = async (e) => {
         },
         body: formTest
     })
-
     let result = await response.json();
     if(response.ok){
-        displayOneProject(result.imageUrl,result.title);
-        displayOneProjectPanel(result.imageUrl);
+        displayOneProject(result.id, result.imageUrl, result.title);
+        let newObj = {categoryId: result.category, id: result.id, imageUrl: result.imageUrl,title: result.title, userId: 1}
+        fetchdJson.then(function(value){
+            value.push(newObj);
+        })
         hideAddPanel()
     }
 }
