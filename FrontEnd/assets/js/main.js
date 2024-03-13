@@ -71,13 +71,7 @@ function filterJson(number){ // affichage des datas filtrés par une option
     fetchdJson.then(function(result){
         result.forEach(element =>{
             if(element.categoryId ==number){
-                let div = listProjects.appendChild(document.createElement("div"));
-                let image = div.appendChild(document.createElement('img'));
-                image.src = element.imageUrl;
-                image.classList.add('h-96', 'object-contain');
-                let p = div.appendChild(document.createElement("p"));
-                p.classList.add('text-sm', 'py-2');
-                p.textContent = element.title;
+                displayOneProject(element.id, element.imageUrl,element.title)
             }
         })
     })
@@ -104,8 +98,7 @@ function displayOneProjectPanel(id, url){
     div.setAttribute('data-id', id)
     div.classList.add('relative')
     let thrash = div.appendChild(document.createElement('button'));
-    thrash.setAttribute = ('id', 'deleteButton'); //
-    thrash.setAttribute = ('data-id', id);
+    thrash.setAttribute('data-id', id);
     thrash.classList.add('fixed','ml-8','mt-1', 'z-10', 'bg-black','h-5', 'w-5', 'flex', 'justify-center', 'items-center', 'cursor-pointer');
     thrash.innerHTML = "<i class=\"fa-solid fa-trash text-white\"></i>";
     let image = div.appendChild(document.createElement('img'));
@@ -274,6 +267,11 @@ addForm.onsubmit = async (e) => {
         hideAddPanel()
     }
 }
+
+panelProjects.addEventListener('click', function(event){
+    let deleteButton = event.target;
+    
+})
 
 // Appels des fonctions dès le load de la page
 
