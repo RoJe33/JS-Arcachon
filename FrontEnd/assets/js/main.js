@@ -1,6 +1,6 @@
 // Appel asynchrone des projets ainsi que des catégories
 
-async function testWork(){ //fonction de récup de l'api
+async function getApi(){ //fonction de récup de l'api
     const response = await fetch("http://localhost:5678/api/works");
     return await response.json();
 }
@@ -12,7 +12,7 @@ async function categories(){ //fonction de récup de l'api
 
 //Liste des variables
 
-let fetchdJson = testWork();
+let fetchdJson = getApi();
 let fetchdCategories = categories();
 let listProjects = document.getElementById("listProjects");
 let login = document.getElementById("login");
@@ -270,7 +270,7 @@ addForm.onsubmit = async (e) => {
 
 panelProjects.addEventListener('click', function(event){
     let deleteButton = event.target;
-    
+
 })
 
 // Appels des fonctions dès le load de la page
