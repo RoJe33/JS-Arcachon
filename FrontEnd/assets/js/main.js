@@ -13,11 +13,7 @@ async function categories(){ //fonction de récup de l'api
 //Liste des variables
 
 let fetchdJson = getApi();
-let fetchdCategories = categories();
 let listProjects = document.getElementById("listProjects");
-let login = document.getElementById("login");
-let myButtons = document.getElementById("myButtons");
-let myProjects = document.getElementById("myProjects");
 let panelModify = document.getElementById("panelModify");
 let panelApi = document.getElementById("panel-data-api");
 let childPanelApi = document.getElementById("child-panel-api");
@@ -25,11 +21,7 @@ let X = document.getElementById("X");
 let panelProjects = document.getElementById("panelProjects");
 let addProject = document.getElementById("addProject");
 let addProjectPanel = document.getElementById("addProjectPanel");
-let childAddPanel = document.getElementById("child-add-panel");
-let closeAdd = document.getElementById("closeAdd");
-let returnPanel = document.getElementById("returnPanel");
 let uploadPhoto = document.getElementById("uploadPhoto");
-let buttonFile = document.getElementById("buttonFile");
 let category = document.getElementById("category");
 let previewImage = document.getElementById("previewImage");
 let addForm = document.getElementById("addForm");
@@ -141,6 +133,7 @@ function hideAddPanel(){
 }
 
 function displayCat(){ // Affichage des datas raw de l'api
+    let fetchdCategories = categories();
     fetchdCategories.then(function(result) {
         result.forEach(element => {
             let option = category.appendChild(document.createElement("option"));
@@ -153,16 +146,40 @@ function displayCat(){ // Affichage des datas raw de l'api
 
 function uploadImage(){
     let file = uploadPhoto.files[0];
-    console.log(uploadPhoto.getAttribute('name'))
     if(file){
         let reader = new FileReader();
         reader.onload = function (e) {
-            console.log(file)
             let imageDataUrl = e.target.result;
             previewImage.innerHTML = `<div class="justify-center flex"><img src="${imageDataUrl}" alt="Uploaded Image" class="max-h-40 max-w-80 items-center"></div>`
         }
         reader.readAsDataURL(file);
     }
+}
+
+async function deleteProject(id){
+    let response = await fetch("http://localhost:5678/api/works/" + id,
+    {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+    })
+    return response;
+}
+
+function deletePanelShow(){
+    deletePanel.classList.remove('hidden');
+    setTimeout(()=> {
+        deletePanel.classList.add("opacity-100");
+        deletePanel.classList.remove("opacity-0");
+    })
+    setTimeout(()=> {
+        deletePanel.classList.add("opacity-0");
+        deletePanel.classList.remove("opacity-100");
+    }, 3000)
+    setTimeout(()=> {
+        deletePanel.classList.add("hidden");
+    }, 3500)
 }
 
 // Liste des Event et submit
@@ -210,11 +227,11 @@ addProject.addEventListener('click', function(event){
     showAddPanel();
 })
 
-closeAdd.addEventListener('click', function(event){
+document.getElementById("closeAdd").addEventListener('click', function(event){
     hideAddPanel();
 })
 
-childAddPanel.addEventListener('click', function(event){
+document.getElementById("child-add-panel").addEventListener('click', function(event){
     event.stopPropagation   ;
 })
 
@@ -224,7 +241,7 @@ addProjectPanel.addEventListener('click',function(event){
     }
 })
 
-returnPanel.addEventListener('click', function(event){
+document.getElementById("returnPanel").addEventListener('click', function(event){
     panelApi.classList.remove("hidden");
     panelApi.classList.add("opacity-100");
     panelApi.classList.remove("opacity-0");
@@ -235,7 +252,7 @@ returnPanel.addEventListener('click', function(event){
     }, 500)
 })
 
-buttonFile.addEventListener('click', function(event){
+document.getElementById("buttonFile").addEventListener('click', function(event){
     uploadPhoto.click();
 })
 
@@ -268,16 +285,14 @@ addForm.onsubmit = async (e) => {
     }
 }
 
-panelProjects.addEventListener('click', function(event){
+panelProjects.addEventListener('click', async function(event){
     event.preventDefault();
     event.stopPropagation;
     let deleteButton = event.target;
     let project = deleteButton.closest("div");
     let idProject = parseInt(project.getAttribute("data-id"));
-    let response = deleteProject(idProject);
-    console.log(response)
+    let response = await deleteProject(idProject);
     if(response.ok){
-        console.log("cooucuocuo")
         let element = document.querySelector(`[data-id="${idProject}"]`);
         element.classList.add('hidden');
         fetchdJson.then(function(value){
@@ -289,21 +304,9 @@ panelProjects.addEventListener('click', function(event){
             }
         })
         hidePanelApi();
+        deletePanelShow();
     }
 })
-
-async function deleteProject(id){
-    
-    let response = await fetch("http://localhost:5678/api/works/" + id,
-    {
-        method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-    })
-
-    return response;
-}
 
 // Appels des fonctions dès le load de la page
 
@@ -311,9 +314,9 @@ displayData();
 displayCat();
 
 //Vérif token
-localStorage.getItem("token") ? login.textContent = "logout" : '';
+localStorage.getItem("token") ? document.getElementById("login").textContent = "logout" : '';
 
 if(localStorage.getItem("token")){
-    myButtons.classList.add("hidden")
+    document.getElementById("myButtons").classList.add("hidden")
     panelModify.classList.remove("hidden")
 }
