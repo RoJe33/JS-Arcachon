@@ -269,9 +269,41 @@ addForm.onsubmit = async (e) => {
 }
 
 panelProjects.addEventListener('click', function(event){
+    event.preventDefault();
+    event.stopPropagation;
     let deleteButton = event.target;
-
+    let project = deleteButton.closest("div");
+    let idProject = parseInt(project.getAttribute("data-id"));
+    let response = deleteProject(idProject);
+    console.log(response)
+    if(response.ok){
+        console.log("cooucuocuo")
+        let element = document.querySelector(`[data-id="${idProject}"]`);
+        element.classList.add('hidden');
+        fetchdJson.then(function(value){
+            let indexProject = value.findIndex(function(object){
+                return object.id === idProject;
+            })
+            if (indexProject !== -1) {
+                value.splice(indexProject, 1);
+            }
+        })
+        hidePanelApi();
+    }
 })
+
+async function deleteProject(id){
+    
+    let response = await fetch("http://localhost:5678/api/works/" + id,
+    {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+    })
+
+    return response;
+}
 
 // Appels des fonctions dès le load de la page
 
